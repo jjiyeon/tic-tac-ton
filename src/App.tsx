@@ -8,22 +8,37 @@ import { Button, FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
+import TicTacToe from "./components";
+import * as UI from "./components/style";
 
 const StyledApp = styled.div`
-  background-color: #e8e8e8;
+  background-color: #2eaddc;
+  background-image: radial-gradient(
+    149.59% 88.94% at -53.99% -42.96%,
+    rgba(249, 69, 141, 0) 0%,
+    rgba(249, 69, 141, 0) 0.01%,
+    #201e45 100%
+  );
+  width: 100%;
+  height: 100vh;
   color: black;
 
   @media (prefers-color-scheme: dark) {
     background-color: #222;
     color: white;
   }
-  min-height: 100vh;
-  padding: 20px 20px;
+  /* min-height: 100vh; */
+  /* padding: 20px 20px; */
 `;
 
 const AppContainer = styled.div`
-  max-width: 900px;
-  margin: 0 auto;
+  display: flex;
+  height: 100%;
+  align-items: center;
+
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
 `;
 
 function App() {
@@ -32,7 +47,11 @@ function App() {
   return (
     <StyledApp>
       <AppContainer>
-        <FlexBoxCol>
+        <UI.ConnectWallet>
+          <TonConnectButton />
+        </UI.ConnectWallet>
+        <TicTacToe />
+        {/* <FlexBoxCol>
           <FlexBoxRow>
             <TonConnectButton />
             <Button>
@@ -46,7 +65,7 @@ function App() {
           <Counter />
           <TransferTon />
           <Jetton />
-        </FlexBoxCol>
+        </FlexBoxCol> */}
       </AppContainer>
     </StyledApp>
   );
