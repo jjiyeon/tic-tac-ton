@@ -1,7 +1,6 @@
 import './App.css'
 import { TonConnectButton } from '@tonconnect/ui-react'
 import '@twa-dev/sdk'
-import { useTonConnect } from './hooks/useTonConnect'
 import styled from 'styled-components'
 import TicTacToe from './components'
 import * as UI from './components/style'
@@ -30,8 +29,6 @@ const AppContainer = styled.div`
 `
 
 function App() {
-  const { network } = useTonConnect()
-
   return (
     <StyledApp>
       <AppContainer>
