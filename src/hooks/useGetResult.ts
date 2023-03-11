@@ -1,20 +1,24 @@
 import { getHttpEndpoint } from '@orbs-network/ton-access'
 import { useMemo } from 'react'
 import { Address, TonClient } from 'ton'
-import Game from './game'
+import { TransactionProps } from '../components'
+import { GAME_CONTRACT_ADDRESS } from '../const/game'
+import Game from '../contract/game'
 
-const useGetResult = async () => {
-  // console.log('useGetResult')
-  const endpoint = await getHttpEndpoint({ network: 'mainnet' })
-  const client = new TonClient({ endpoint })
+const useGetResult = async ({ client }: TransactionProps) => {
+  console.log('useGetResult')
 
-  const gameAddress = Address.parse('EQCG2m0OX_VTLLtJk8o_kDaIcWQeTxrQ_NyG312Gz29tfRNw')
+  const gameAddress = Address.parse(GAME_CONTRACT_ADDRESS)
+
   const game = new Game(gameAddress)
-  const gameContract = client.open(game)
-  const value = await gameContract.getConfig()
+  if (client) {
+    const gameContract = client.open(game)
+    const value = await gameContract.getConfig()
+    const gameResult = value.results
+    console.log('value : ', value.results)
 
-  const gameResult = value.results
-  return gameResult
+    return gameResult
+  }
 }
 
 export default useGetResult
