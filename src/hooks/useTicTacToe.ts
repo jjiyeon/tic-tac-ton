@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useReducer } from 'react'
 import produce from 'immer'
 import useGetResult from './useGetResult'
-import { main } from './get-result'
-import { Result } from '../libs/game'
+import { getMain } from './get-result'
+import { Result } from '../contract/game'
 import { useTonConnect } from './useTonConnect'
+import { updateMain } from './update-result'
+import { useTonClient } from './useTonClient'
+import { getMidAiIndex } from '../utils/ai'
+import { AI, DEFAULT, HUMAN, winCombos } from '../const/game'
+import { checkGame } from '../utils/game'
 
 export type GameState = {
   whoTurn: string
@@ -22,7 +27,7 @@ type ResultCount = {
 interface IndexResult {
   [index: string]: string
 }
-const resultType: IndexResult = {
+export const resultType: IndexResult = {
   win: 'win',
   lose: 'lose',
   tie: 'tie',
@@ -54,28 +59,24 @@ export type GameAction =
   | {
       type: 'CHECK_BOARD'
     }
+  | {
+      type: 'WALLET_NOT_FOUND'
+    }
+  | {
+      type: 'SET_CONFIG_RESULT'
+      payload: { result: Result[]; wallet: string }
+    }
+  | {
+      type: 'CHECK_GAME'
+    }
 
 type GameReducer = (state: GameState, action: GameAction) => GameState
-const HUMAN = 'o'
-const AI = 'x'
-const DEFAULT = ''
-const winCombos = [
-  //horizontal
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  //vertical
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  //slant
-  [0, 4, 8],
-  [6, 4, 2],
-]
 
 const useTicTacToe = () => {
-  const getGameValue = useGetResult()
+  // const getGameValue = useGetResult()
   // const { sender, connected } = useTonConnect()
+  // const { sender, connected, wallet } = useTonConnect()
+  // const { client } = useTonClient()
 
   const [gameState, gameDispatcher] = useReducer<GameReducer>(
     produce((state, action) => {
@@ -87,14 +88,12 @@ const useTicTacToe = () => {
           if (state.board[action.payload.idx] !== DEFAULT) return
 
           state.board[action.payload.idx] = state.whoTurn
-          winCombos.forEach((winArray) => {
-            const checkList = winArray.map((item, idx) => state.board[item])
-            if (checkList[0] !== DEFAULT && checkList[0] === checkList[1] && checkList[1] === checkList[2]) {
-              state.winner = checkList[0]
-              console.log('winner : ', checkList[0])
-              // return
-            }
-          })
+          const result = checkGame(state.board)
+
+          if (result !== null) {
+            state.winner = result
+            return
+          }
           // if (state.winner !== '') return
           state.whoTurn = AI
 
@@ -103,31 +102,21 @@ const useTicTacToe = () => {
         }
         case 'SET_AI_BOARD': {
           if (state.winner !== '') return
-          const array = state.board
-            .map((val, idx) => {
-              return val === DEFAULT ? idx : null
-            })
-            .filter((val, _) => val !== null)
 
-          if (array.length === 0) state.winner = resultType.tie
+          const aiIndex = getMidAiIndex(state.board)
+          if (aiIndex === null) return (state.winner = resultType.tie)
+          if (state.board[aiIndex] !== DEFAULT) return
+          state.board[aiIndex] = state.whoTurn
 
-          const random = Math.floor(Math.random() * array.length)
-          console.log('random : ', random)
-          const index = array[random]!
-          //
-          if (state.board[index] !== DEFAULT) return
-
-          winCombos.map((winArray) => {
-            const checkList = winArray.map((item, idx) => state.board[item])
-            if (checkList[0] !== DEFAULT && checkList[0] === checkList[1] && checkList[1] === checkList[2]) {
-              state.winner = checkList[0]
-              console.log('winner : ', checkList[0])
-              return checkList[0]
-            }
-          })
-
-          state.board[index] = state.whoTurn
+          const result = checkGame(state.board)
+          if (result !== null) {
+            state.winner = result
+            return
+          }
           state.whoTurn = HUMAN
+          break
+        }
+        case 'CHECK_GAME': {
           break
         }
         case 'CHECK_RESULT': {
@@ -157,9 +146,26 @@ const useTicTacToe = () => {
           break
         }
         case 'TRIGGER_RESULT_MODAL': {
-          console.log('modal sy!')
           state.isModalShow = !state.isModalShow
           if (state.isModalShow === false) state.winner = ''
+
+          state.board = Array.from({ length: 9 }, () => '')
+
+          state.whoTurn = HUMAN
+          break
+        }
+        case 'WALLET_NOT_FOUND': {
+          console.log('지갑연결이 필요합니다.')
+          break
+        }
+        case 'SET_CONFIG_RESULT': {
+          console.log('reducer , ', action.payload.result)
+
+          // const result = action.payload.result.filter((val, idx) => val.address.toRawString() === action.payload.wallet)
+          // state.localResult.win = result[0].win
+          // state.localResult.lose = result[0].lose
+          // state.localResult.tie = result[0].tie
+          // console.log(result)
           break
         }
         default:
@@ -186,16 +192,15 @@ const useTicTacToe = () => {
   useEffect(() => {
     // board가 다 찼고, 승리자가 없으면 무승부!
     // gameDispatcher({ type: 'CHECK_BOARD' })
-  }, [gameState.board])
+  }, [])
   useEffect(() => {
     if (gameState.winner !== '') {
       gameDispatcher({ type: 'TRIGGER_RESULT_MODAL' })
       gameDispatcher({ type: 'CHECK_RESULT', payload: resultType[gameState.winner] })
-      gameDispatcher({ type: 'GAME_INIT' })
+      // gameDispatcher({ type: 'GAME_INIT' })
     }
   }, [gameState.winner])
 
-  // \
   return [gameState, gameDispatcher] as const
 }
 
