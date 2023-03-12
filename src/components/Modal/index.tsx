@@ -9,6 +9,7 @@ type WinnerProps = {
 const Modal = ({ winner, dispatch }: PropsWithChildren<WinnerProps>) => {
   const onResetClick = () => {
     dispatch({ type: 'TRIGGER_RESULT_MODAL' })
+    dispatch({ type: 'GAME_INIT' })
   }
   return (
     <UI.ModalContainer>
