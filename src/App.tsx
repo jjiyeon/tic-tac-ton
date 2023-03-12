@@ -32,7 +32,9 @@ function App() {
   return (
     <StyledApp>
       <AppContainer>
-        <UI.ConnectWallet>{/* <TonConnectButton /> */}</UI.ConnectWallet>
+        <UI.ConnectWallet>
+          <TonConnectButton />
+        </UI.ConnectWallet>
         <TicTacToe />
       </AppContainer>
     </StyledApp>

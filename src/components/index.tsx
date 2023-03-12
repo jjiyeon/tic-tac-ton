@@ -32,15 +32,15 @@ const TicTacToe = () => {
     gameDispatcher({ type: 'SET_CONFIG_RESULT', payload: { result: configResult || [], wallet: wallet! } })
   }
 
-  // useEffect(() => {
-  //   if (connected && wallet && client) {
-  //     console.log(1, wallet, connected, client)
-  //     console.log(2)
-  //     updateMain({ sender: sender, wallet: wallet, client: client })
-  //     useGetResult({ sender: sender, wallet: wallet, client: client })
-  //     getConfigResult()
-  //   }
-  // }, [client])
+  useEffect(() => {
+    if (connected && wallet && client) {
+      console.log(1, wallet, connected, client)
+      console.log(2)
+      // updateMain({ sender: sender, wallet: wallet, client: client })
+      // useGetResult({ sender: sender, wallet: wallet, client: client })
+      getConfigResult()
+    }
+  }, [client])
   return (
     <UI.Container>
       <UI.Header>Tic Tac Toe-!</UI.Header>

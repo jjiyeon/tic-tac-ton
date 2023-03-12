@@ -1,13 +1,8 @@
-import { useCallback, useEffect, useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import produce from 'immer'
-import useGetResult from './useGetResult'
-import { getMain } from './get-result'
 import { Result } from '../contract/game'
-import { useTonConnect } from './useTonConnect'
-import { updateMain } from './update-result'
-import { useTonClient } from './useTonClient'
 import { getMidAiIndex } from '../utils/ai'
-import { AI, DEFAULT, HUMAN, winCombos } from '../const/game'
+import { AI, DEFAULT, HUMAN } from '../const/game'
 import { checkGame } from '../utils/game'
 
 export type GameState = {
@@ -73,11 +68,6 @@ export type GameAction =
 type GameReducer = (state: GameState, action: GameAction) => GameState
 
 const useTicTacToe = () => {
-  // const getGameValue = useGetResult()
-  // const { sender, connected } = useTonConnect()
-  // const { sender, connected, wallet } = useTonConnect()
-  // const { client } = useTonClient()
-
   const [gameState, gameDispatcher] = useReducer<GameReducer>(
     produce((state, action) => {
       switch (action.type) {
