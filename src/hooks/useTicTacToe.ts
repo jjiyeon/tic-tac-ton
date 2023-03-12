@@ -94,10 +94,8 @@ const useTicTacToe = () => {
             state.winner = result
             return
           }
-          // if (state.winner !== '') return
           state.whoTurn = AI
 
-          // 여기서 ai turn
           break
         }
         case 'SET_AI_BOARD': {
@@ -125,21 +123,17 @@ const useTicTacToe = () => {
           if (state.winner === 'o') state.localResult.win += 1
           if (state.winner === 'x') state.localResult.lose += 1
 
-          // console.log(sender)
-          // console.log(connected)
+          //@todo update transaction
           break
         }
         case 'GAME_INIT': {
           //게임 초기화
           state.board = Array.from({ length: 9 }, () => '')
-
           state.whoTurn = HUMAN
 
           break
         }
         case 'CHECK_BOARD': {
-          console.log('-CHECK_BOARD')
-
           const checkBoard = state.board.filter((val, _) => val !== DEFAULT)
           if (checkBoard.length === 0) state.winner = 'tie'
 
@@ -149,9 +143,6 @@ const useTicTacToe = () => {
           state.isModalShow = !state.isModalShow
           if (state.isModalShow === false) state.winner = ''
 
-          state.board = Array.from({ length: 9 }, () => '')
-
-          state.whoTurn = HUMAN
           break
         }
         case 'WALLET_NOT_FOUND': {
@@ -161,11 +152,9 @@ const useTicTacToe = () => {
         case 'SET_CONFIG_RESULT': {
           console.log('reducer , ', action.payload.result)
 
-          // const result = action.payload.result.filter((val, idx) => val.address.toRawString() === action.payload.wallet)
-          // state.localResult.win = result[0].win
-          // state.localResult.lose = result[0].lose
-          // state.localResult.tie = result[0].tie
-          // console.log(result)
+          const result = action.payload.result.filter((val, _) => val.address.toRawString() === action.payload.wallet)
+          state.localResult = { win: result[0].win, lose: result[0].lose, tie: result[0].tie }
+          console.log(result)
           break
         }
         default:
@@ -190,14 +179,9 @@ const useTicTacToe = () => {
   }, [gameState.whoTurn])
 
   useEffect(() => {
-    // board가 다 찼고, 승리자가 없으면 무승부!
-    // gameDispatcher({ type: 'CHECK_BOARD' })
-  }, [])
-  useEffect(() => {
     if (gameState.winner !== '') {
       gameDispatcher({ type: 'TRIGGER_RESULT_MODAL' })
       gameDispatcher({ type: 'CHECK_RESULT', payload: resultType[gameState.winner] })
-      // gameDispatcher({ type: 'GAME_INIT' })
     }
   }, [gameState.winner])
 
