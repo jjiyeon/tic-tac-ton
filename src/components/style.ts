@@ -16,6 +16,8 @@ const WinnerText = styled.h2`
   text-align: center;
   font-size: 40px;
 `
+const WinnerButtonWrapper = styled.div``
+const WinnerButton = styled.button``
 const ModalContainer = styled.div`
   width: 100%;
   height: 100vh;
@@ -47,4 +49,17 @@ const Text = styled.li``
 const ScoreWrapper = styled.div`
   margin: 0 45px;
 `
-export { Container, ScoreWrapper, ScoreTextList, Text, ConnectWallet, WinnerText, Header, ModalContainer, Wrapper, ResetButton }
+export {
+  Container,
+  ScoreWrapper, //
+  WinnerButtonWrapper,
+  WinnerButton,
+  ScoreTextList,
+  Text,
+  ConnectWallet,
+  WinnerText,
+  Header,
+  ModalContainer,
+  Wrapper,
+  ResetButton,
+}
