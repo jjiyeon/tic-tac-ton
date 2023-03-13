@@ -27,15 +27,15 @@ const getWinningIndex = (board: string[], targetPlayer: string) => {
 const getMidAiIndex = (board: string[]) => {
   const attack = getWinningIndex(board, AI)
 
-  console.log('attack  ! ', attack)
+  // console.log('attack  ! ', attack)
   if (attack !== null) return attack
 
   const defense = getWinningIndex(board, HUMAN)
-  console.log('defense  ! ', defense)
+  // console.log('defense  ! ', defense)
   if (defense !== null) return defense
 
   const random = getRandomAiIndex(board)
-  console.log('random  ! ', random)
+  // console.log('random  ! ', random)
   return random
 }
 
@@ -48,7 +48,7 @@ const getRandomAiIndex = (board: string[]) => {
   if (blank.length === 0) return null
 
   const random = Math.floor(Math.random() * blank.length)
-  console.log('random : ', random)
+  // console.log('random : ', random)
   const index = blank[random]!
 
   return index

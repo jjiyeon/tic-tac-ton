@@ -4,6 +4,10 @@ import { Result } from '../contract/game'
 import { getMidAiIndex } from '../utils/ai'
 import { AI, DEFAULT, HUMAN } from '../const/game'
 import { checkGame } from '../utils/game'
+import { useTonConnect } from './useTonConnect'
+import { useTonClient } from './useTonClient'
+import useUpdateResult from './useUpdateResult'
+import { Address } from 'ton'
 
 export type GameState = {
   whoTurn: string
@@ -68,6 +72,9 @@ export type GameAction =
 type GameReducer = (state: GameState, action: GameAction) => GameState
 
 const useTicTacToe = () => {
+  const { sender, connected, wallet } = useTonConnect()
+  const { client } = useTonClient()
+
   const [gameState, gameDispatcher] = useReducer<GameReducer>(
     produce((state, action) => {
       switch (action.type) {
@@ -114,6 +121,12 @@ const useTicTacToe = () => {
           if (state.winner === 'x') state.localResult.lose += 1
 
           //@todo update transaction
+
+          const updateUser = async () => {
+            await useUpdateResult({ sender: sender, wallet: wallet!, client: client!, user: { address: Address.parse(wallet!), ...state.localResult } })
+          }
+
+          updateUser()
           break
         }
         case 'GAME_INIT': {
@@ -140,11 +153,8 @@ const useTicTacToe = () => {
           break
         }
         case 'SET_CONFIG_RESULT': {
-          console.log('reducer , ', action.payload.result)
-
           const result = action.payload.result.filter((val, _) => val.address.toRawString() === action.payload.wallet)
           state.localResult = { win: result[0].win, lose: result[0].lose, tie: result[0].tie }
-          console.log(result)
           break
         }
         default:
@@ -174,6 +184,8 @@ const useTicTacToe = () => {
       gameDispatcher({ type: 'CHECK_RESULT', payload: resultType[gameState.winner] })
     }
   }, [gameState.winner])
+
+  useEffect(() => {}, [])
 
   return [gameState, gameDispatcher] as const
 }

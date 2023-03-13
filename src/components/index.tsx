@@ -1,6 +1,6 @@
 import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react'
 import { useEffect } from 'react'
-import { Config } from '../contract/game'
+import { Config, Result } from '../contract/game'
 import { getMain } from '../hooks/get-result'
 import { updateMain } from '../hooks/update-result'
 import useGetResult from '../hooks/useGetResult'
@@ -18,6 +18,10 @@ export type TransactionProps = {
   wallet: string
   client: TonClient
 }
+
+export type UpdateUserProps = {
+  user: Result
+}
 const TicTacToe = () => {
   const [gameState, gameDispatcher] = useTicTacToe()
   const { sender, connected, wallet } = useTonConnect()
@@ -34,10 +38,6 @@ const TicTacToe = () => {
 
   useEffect(() => {
     if (connected && wallet && client) {
-      console.log(1, wallet, connected, client)
-      console.log(2)
-      // updateMain({ sender: sender, wallet: wallet, client: client })
-      // useGetResult({ sender: sender, wallet: wallet, client: client })
       getConfigResult()
     }
   }, [client])
