@@ -3,7 +3,7 @@
 import { Contract, ContractProvider, Sender, Address, Cell, contractAddress, beginCell, DictionaryValue, Slice, Dictionary, SendMode } from 'ton-core'
 
 const DEFAULT_VALUE = '0.01'
-const VALUE_FOR_SEND = '0.005'
+const VALUE_FOR_SEND = '0.003'
 
 export type Result = {
   address: Address
