@@ -3,14 +3,27 @@ import styled from 'styled-components'
 const Container = styled.div`
   width: 100%;
   color: #fff;
+  font-family: 'Starborn';
+  /* font-style: italic; */
 `
 
 const ConnectWallet = styled.div`
   display: flex;
+
+  button {
+    background-color: tomato;
+  }
 `
 const Header = styled.h1`
   text-align: center;
-  font-family: 'Roboto', sans-serif;
+  width: 100px;
+  height: auto;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `
 const WinnerText = styled.h2`
   text-align: center;
@@ -31,7 +44,7 @@ const ModalContainer = styled.div`
 const Wrapper = styled.div`
   width: 100%;
   height: 33.33%;
-  background: rgba(255, 255, 255, 0.3);
+  background: #9bfa3c;
   align-items: center;
   text-align: center;
 `
@@ -43,6 +56,10 @@ const ScoreTextList = styled.ul`
 
   width: 300px;
   margin: 0 auto;
+
+  font-size: 20px;
+  justify-content: space-between;
+  padding: 10px 0;
 `
 const Text = styled.li``
 

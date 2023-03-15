@@ -15,7 +15,7 @@ const Modal = ({ winner, dispatch }: PropsWithChildren<WinnerProps>) => {
     <UI.ModalContainer>
       <UI.Wrapper>
         <UI.WinnerText>{winner}</UI.WinnerText>
-        <UI.ResetButton onClick={() => onResetClick()}>다시하기</UI.ResetButton>
+        <UI.ResetButton onClick={() => onResetClick()}>Replay</UI.ResetButton>
       </UI.Wrapper>
     </UI.ModalContainer>
   )

@@ -1,8 +1,6 @@
 import { TonConnectButton, useTonConnectUI } from '@tonconnect/ui-react'
 import { useEffect } from 'react'
 import { Config, Result } from '../contract/game'
-import { getMain } from '../hooks/get-result'
-import { updateMain } from '../hooks/update-result'
 import useGetResult from '../hooks/useGetResult'
 import useTicTacToe from '../hooks/useTicTacToe'
 import { useTonConnect } from '../hooks/useTonConnect'
@@ -21,6 +19,7 @@ export type TransactionProps = {
 
 export type UpdateUserProps = {
   user: Result
+  configValue: Config
 }
 const TicTacToe = () => {
   const [gameState, gameDispatcher] = useTicTacToe()
@@ -28,12 +27,12 @@ const TicTacToe = () => {
   const { client } = useTonClient()
 
   const handleSquareClick = (id: number) => {
-    if (!connected) return gameDispatcher({ type: 'WALLET_NOT_FOUND' }) // 알림창 컴포넌트 필요
+    // if (!connected) return gameDispatcher({ type: 'WALLET_NOT_FOUND' }) // 알림창 컴포넌트 필요
     gameDispatcher({ type: 'SET_BOARD', payload: { idx: id } })
   }
   const getConfigResult = async () => {
     const configResult = await useGetResult({ sender: sender, wallet: wallet!, client: client! })
-    gameDispatcher({ type: 'SET_CONFIG_RESULT', payload: { result: configResult || [], wallet: wallet! } })
+    gameDispatcher({ type: 'SET_CONFIG_RESULT', payload: { configValue: configResult!, wallet: wallet! } })
   }
 
   useEffect(() => {
@@ -43,7 +42,14 @@ const TicTacToe = () => {
   }, [client])
   return (
     <UI.Container>
-      <UI.Header>Tic Tac Toe-!</UI.Header>
+      <UI.Header>
+        <img src="/crown.png" alt="main logo img" />
+      </UI.Header>
+      <UI.ScoreTextList>
+        <UI.Text>Win : {gameState.localResult.win || 0}</UI.Text>
+        <UI.Text>Lose :{gameState.localResult.lose || 0}</UI.Text>
+        <UI.Text>Tie :{gameState.localResult.tie || 0}</UI.Text>
+      </UI.ScoreTextList>
       {/* <UI.WinnerButtonWrapper>
         <UI.WinnerButton>
           <img src="/trophy-white.svg" alt="winner list check icon" />
@@ -58,12 +64,16 @@ const TicTacToe = () => {
         <Game squareCurrentValue={gameState} onSquareClick={(id) => handleSquareClick(id)} />
       </div>
       <UI.ScoreWrapper>
-        <UI.ScoreTextList>
+        {/* <UI.ScoreTextList>
           <UI.Text>Win : {gameState.localResult.win || 0}</UI.Text>
           <UI.Text>Lose :{gameState.localResult.lose || 0}</UI.Text>
           <UI.Text>Tie :{gameState.localResult.tie || 0}</UI.Text>
-        </UI.ScoreTextList>
+        </UI.ScoreTextList> */}
       </UI.ScoreWrapper>
+      <UI.ConnectWallet>
+        {/* <button>기록하기</button> */}
+        <TonConnectButton />
+      </UI.ConnectWallet>
     </UI.Container>
   )
 }
