@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from 'react'
 import produce from 'immer'
-import { Result } from '../contract/game'
+import { Config, Result } from '../contract/game'
 import { getMidAiIndex } from '../utils/ai'
 import { AI, DEFAULT, HUMAN } from '../const/game'
 import { checkGame } from '../utils/game'
@@ -15,9 +15,10 @@ export type GameState = {
   winner: string
   isModalShow: boolean
   localResult: ResultCount
-  contractResult: Result[]
+  contractResult?: Config
 }
 type ResultCount = {
+  address?: Address
   win: number
   lose: number
   tie: number
@@ -63,7 +64,7 @@ export type GameAction =
     }
   | {
       type: 'SET_CONFIG_RESULT'
-      payload: { result: Result[]; wallet: string }
+      payload: { configValue: Config; wallet: string }
     }
   | {
       type: 'CHECK_GAME'
@@ -123,7 +124,13 @@ const useTicTacToe = () => {
           //@todo update transaction
 
           const updateUser = async () => {
-            await useUpdateResult({ sender: sender, wallet: wallet!, client: client!, user: { address: Address.parse(wallet!), ...state.localResult } })
+            await useUpdateResult({
+              sender: sender,
+              wallet: wallet!, //
+              client: client!,
+              user: { address: Address.parse(wallet!), ...state.localResult },
+              configValue: state.contractResult!,
+            })
           }
 
           updateUser()
@@ -153,8 +160,10 @@ const useTicTacToe = () => {
           break
         }
         case 'SET_CONFIG_RESULT': {
-          const result = action.payload.result.filter((val, _) => val.address.toRawString() === action.payload.wallet)
-          state.localResult = { win: result[0].win, lose: result[0].lose, tie: result[0].tie }
+          state.contractResult = action.payload.configValue
+
+          const result = action.payload.configValue && action.payload.configValue.results.filter((val, _) => val.address.toRawString() === action.payload.wallet)
+          state.localResult = { address: result![0].address, win: result![0].win, lose: result![0].lose, tie: result![0].tie }
           break
         }
         default:
@@ -167,7 +176,7 @@ const useTicTacToe = () => {
       winner: '',
       isModalShow: false,
       localResult: { win: 0, lose: 0, tie: 0 },
-      contractResult: [],
+      contractResult: undefined,
     }
   )
 
