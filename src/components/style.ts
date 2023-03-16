@@ -21,6 +21,10 @@ const Header = styled.h1`
   height: auto;
   margin: 0 auto;
 
+  button {
+    all: unset;
+    cursor: pointer;
+  }
   img {
     width: 100%;
     height: 100%;
@@ -29,6 +33,7 @@ const Header = styled.h1`
 const WinnerText = styled.h2`
   text-align: center;
   font-size: 40px;
+  color: #000;
 `
 const WinnerButtonWrapper = styled.div``
 const WinnerButton = styled.button``
@@ -48,8 +53,20 @@ const Wrapper = styled.div`
   background: #9bfa3c;
   align-items: center;
   text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
 `
-const ResetButton = styled.button``
+const ResetButton = styled.button`
+  width: 200px;
+  height: 60px;
+  border: 1px solid #000;
+  background: #52abfc;
+  border-radius: 20px;
+  color: #fff;
+`
 const ScoreTextList = styled.ul`
   display: flex;
   gap: 20px;
