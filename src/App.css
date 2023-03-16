@@ -3,6 +3,12 @@
   --tg-theme-button-color: #2eaddc;
   --tg-theme-button-text-color: white;
 }
+@font-face {
+  font-family: 'Starborn';
+  src: url('../font/Starborn.oft') format('opentype');
+  font-display: swap;
+}
+
 * {
   font-family: 'Starborn';
 }
