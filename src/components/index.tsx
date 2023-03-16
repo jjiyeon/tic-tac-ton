@@ -43,7 +43,7 @@ const TicTacToe = () => {
   return (
     <UI.Container>
       <UI.Header>
-        <img src="/crown.png" alt="main logo img" />
+        <img src="./crown.png" alt="main logo img" />
       </UI.Header>
       <UI.ScoreTextList>
         <UI.Text>Win : {gameState.localResult.win || 0}</UI.Text>

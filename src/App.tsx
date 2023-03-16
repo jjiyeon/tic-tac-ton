@@ -8,7 +8,7 @@ import * as UI from './components/style'
 const StyledApp = styled.div`
   @font-face {
     font-family: 'Starborn';
-    src: url('/font/Starborn.otf') format('opentype');
+    src: url('./font/Starborn.otf') format('opentype');
     font-display: swap;
   }
 
