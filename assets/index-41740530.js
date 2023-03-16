@@ -660,6 +660,11 @@ Values:
   color: black;
   font-family: 'Starborn';
 
+  @font-face {
+    font-family: 'Starborn';
+    src: url('font/Starborn.otf') format('opentype');
+    font-display: swap;
+  }
   @media (prefers-color-scheme: dark) {
     background-color: #222;
     color: white;
