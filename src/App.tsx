@@ -6,12 +6,6 @@ import TicTacToe from './components'
 import * as UI from './components/style'
 
 const StyledApp = styled.div`
-  @font-face {
-    font-family: 'Starborn';
-    src: url('../font/Starborn.oft') format('opentype');
-    font-display: swap;
-  }
-
   background-color: #2eaddc;
   background-image: linear-gradient(207deg, rgba(13, 129, 218, 1) 35%, rgba(212, 39, 233, 1) 100%);
   width: 100%;
