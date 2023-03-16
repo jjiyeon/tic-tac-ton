@@ -652,12 +652,6 @@ Values:
 `,Text=styled.li``,ScoreWrapper=styled.div`
   margin: 0 45px;
 `,Modal=({winner:et,dispatch:tt})=>{const rt=()=>{tt({type:"TRIGGER_RESULT_MODAL"}),tt({type:"GAME_INIT"})};return jsx$1(ModalContainer,{children:jsxs(Wrapper,{children:[jsx$1(WinnerText,{children:et}),jsx$1(ResetButton,{onClick:()=>rt(),children:"Replay"})]})})},TicTacToe=()=>{const[et,tt]=useTicTacToe(),{sender:rt,connected:nt,wallet:ot}=useTonConnect(),{client:it}=useTonClient(),ft=pt=>{tt({type:"SET_BOARD",payload:{idx:pt}})},ht=async()=>{const pt=await useGetResult({sender:rt,wallet:ot,client:it});tt({type:"SET_CONFIG_RESULT",payload:{configValue:pt,wallet:ot}})};return reactExports.useEffect(()=>{nt&&ot&&it&&ht()},[it]),jsxs(Container,{children:[jsx$1(Header,{children:jsx$1("img",{src:"./crown.png",alt:"main logo img"})}),jsxs(ScoreTextList,{children:[jsxs(Text,{children:["Win : ",et.localResult.win||0]}),jsxs(Text,{children:["Lose :",et.localResult.lose||0]}),jsxs(Text,{children:["Tie :",et.localResult.tie||0]})]}),jsxs("div",{children:[et.isModalShow&&jsx$1(Modal,{winner:et.winner,dispatch:tt,children:et.winner}),jsx$1(Game,{squareCurrentValue:et,onSquareClick:pt=>ft(pt)})]}),jsx$1(ScoreWrapper,{}),jsx$1(ConnectWallet,{children:jsx$1(TonConnectButton$1,{})})]})},StyledApp=styled.div`
-  @font-face {
-    font-family: 'Starborn';
-    src: url('../font/Starborn.oft') format('opentype');
-    font-display: swap;
-  }
-
   background-color: #2eaddc;
   background-image: linear-gradient(207deg, rgba(13, 129, 218, 1) 35%, rgba(212, 39, 233, 1) 100%);
   width: 100%;
