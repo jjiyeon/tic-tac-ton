@@ -6,7 +6,6 @@ const checkVictory = (gameBoard: string[]) => {
   winCombos.map((winArray) => {
     const checkList = winArray.map((item, idx) => gameBoard[item])
     if (checkList[0] !== DEFAULT && checkList[0] === checkList[1] && checkList[1] === checkList[2]) {
-      console.log('winner : ', checkList[0])
       winner = checkList[0]
       return
     }
