@@ -606,6 +606,7 @@ Values:
   /* font-style: italic; */
 `,ConnectWallet=styled.div`
   display: flex;
+  justify-content: center;
 
   button {
     background-color: tomato;
