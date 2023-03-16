@@ -9,6 +9,7 @@ const Container = styled.div`
 
 const ConnectWallet = styled.div`
   display: flex;
+  justify-content: center;
 
   button {
     background-color: tomato;
