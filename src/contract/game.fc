@@ -4,16 +4,15 @@
 
 _ load_data() inline {
   var ds = get_data().begin_parse();
-  var res = (ds~load_msg_addr(), ds~load_coins(), ds~load_uint(64), ds~load_dict());
+  var res = (ds~load_msg_addr(), ds~load_uint(64), ds~load_dict());
   ds.end_parse();
 
   return res;
 }
 
-() save_data(slice owner, int prize, int period, cell results) impure inline {
+() save_data(slice owner, int period, cell results) impure inline {
   set_data(begin_cell()
     .store_slice(owner)
-    .store_coins(prize)
     .store_uint(period, 64)
     .store_dict(results)
     .end_cell());
@@ -21,12 +20,33 @@ _ load_data() inline {
 
 ;; =============== messages =============================
 
-(slice, int, int, cell) unpack_result(cell cs) inline_ref {
+(slice, int, cell) unpack_result(cell cs) inline_ref {
   var ds = cs.begin_parse();
-  var res = (ds~load_msg_addr(), ds~load_coins(), ds~load_uint(64), ds~load_dict());
+  var res = (ds~load_msg_addr(), ds~load_uint(64), ds~load_dict());
   ds.end_parse();
 
   return res;
+}
+
+(slice, slice, slice) unpack_address(cell cs) inline_ref {
+  var ds = cs.begin_parse();
+  var res = (ds~load_msg_addr(), ds~load_msg_addr(), ds~load_msg_addr());
+  ds.end_parse();
+
+  return res;
+}
+
+() send_prize_message(slice address, int prize) impure inline {
+  cell msg = begin_cell()
+    .store_uint(0x18, 6)
+    .store_slice(address)
+    .store_coins(prize)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+    .store_uint(0, 32)
+  .end_cell();
+
+  send_raw_message(msg, 3);
+  return ();
 }
 
 _ recv_internal(int balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
@@ -38,30 +58,48 @@ _ recv_internal(int balance, int msg_value, cell in_msg_full, slice in_msg_body)
   }
 
   slice sender_addr = cs~load_msg_addr();
+  var (owner, _, _) = load_data();
+
   int op = in_msg_body~load_uint(32);
 
-  if (op == "op::update_prize"c) {
-    int setPrize = in_msg_body~load_coins();
-    var (owner, prize, period, results) = load_data();
-
-    save_data(owner, setPrize, period, results);
-    return ();
-  }
-
   if (op == "op::update_period"c) {
+    throw_if(36, ~ equal_slice_bits(owner, sender_addr));
     int setPeriod = in_msg_body~load_uint(64);
-    var (owner, prize, period, results) = load_data();
+    var (owner, period, results) = load_data();
 
-    save_data(owner, prize, setPeriod, results);
+    save_data(owner, setPeriod, results);
     return ();
   }
 
   if (op == "op::update_results"c) {
     var cs = in_msg_body~load_ref();
 
-    var (owner, prize, period, results) = unpack_result(cs);
+    var (owner, period, results) = unpack_result(cs);
 
-    save_data(owner, prize, period, results);
+    save_data(owner, period, results);
+    return ();
+  }
+
+  if (op == "op::send_prize"c) {
+    throw_if(36, ~ equal_slice_bits(owner, sender_addr));
+    
+    var cs = in_msg_body~load_ref();
+    var (first, second, third) = unpack_address(cs);
+    var current_time = in_msg_body~load_uint(64);
+    var (owner, period, _) = load_data();
+
+    throw_if(35, current_time < period);
+
+    int owner_prize = balance * 5 / 100;
+    int first_prize = balance * 40 / 100;
+    int second_prize = balance * 30 / 100;
+    int third_prize = balance * 20 / 100;
+
+    send_prize_message(owner, owner_prize);
+    send_prize_message(first, first_prize);
+    send_prize_message(second, second_prize);
+    send_prize_message(third, third_prize);
+
     return ();
   }
 
@@ -71,17 +109,12 @@ _ recv_internal(int balance, int msg_value, cell in_msg_full, slice in_msg_body)
 ;; =============== getters =============================
 
 slice get_owner() method_id {
-  var (owner, _, _, _) = load_data();
+  var (owner, _, _) = load_data();
   return (owner);
 }
 
-int get_prize() method_id {
-  var (_, prize, _, _) = load_data();
-  return (prize);
-}
-
 int get_period() method_id  {
-  var (_, _, period, _) = load_data();
+  var (_, period, _) = load_data();
   return period;
 }
 
