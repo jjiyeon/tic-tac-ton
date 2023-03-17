@@ -1,4 +1,4 @@
-import { DEFAULT, HUMAN, winCombos } from '../const/game'
+import { AI, DEFAULT, HUMAN, winCombos } from '../const/game'
 import { resultType } from '../hooks/useTicTacToe'
 
 const checkVictory = (gameBoard: string[]) => {
@@ -26,6 +26,7 @@ const checkGame = (gameBoard: string[]) => {
   const winner = checkVictory(gameBoard)
   if (winner !== null) {
     return winner === HUMAN ? resultType.win : resultType.lose
+    // return winner === HUMAN ? HUMAN : AI
   }
   const isTie = checkTie(gameBoard)
   if (isTie) {

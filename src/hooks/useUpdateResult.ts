@@ -26,7 +26,7 @@ const useUpdateResult = async ({ sender, wallet, client, user, configValue }: Up
   if (findUser.length) {
     configValue.results = newResult
   } else {
-    configValue.results.push(user) //{ address: Address.parse(wallet), win: 2, lose: 0, tie: 0 }
+    configValue.results.push(user)
   }
 
   await gameContract.sendUpdateResult(sender, configToCell(configValue))

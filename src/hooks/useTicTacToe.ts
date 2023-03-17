@@ -17,8 +17,8 @@ export type GameState = {
   localResult: ResultCount
   contractResult?: Config
 }
-type ResultCount = {
-  address?: Address
+export type ResultCount = {
+  address: Address | string
   win: number
   lose: number
   tie: number
@@ -69,6 +69,10 @@ export type GameAction =
   | {
       type: 'CHECK_GAME'
     }
+  | {
+      type: 'RECORD_MY_SCORE'
+      // payload: Omit<ResultCount, 'address'>
+    }
 
 type GameReducer = (state: GameState, action: GameAction) => GameState
 
@@ -87,7 +91,6 @@ const useTicTacToe = () => {
 
           state.board[action.payload.idx] = state.whoTurn
           const result = checkGame(state.board)
-
           if (result !== null) {
             state.winner = result
             return
@@ -117,18 +120,24 @@ const useTicTacToe = () => {
         }
         case 'CHECK_RESULT': {
           //승부 확인
+
           if (state.winner === resultType.tie) state.localResult.tie += 1
-          if (state.winner === 'o') state.localResult.win += 1
-          if (state.winner === 'x') state.localResult.lose += 1
+          if (state.winner === resultType.win) state.localResult.win += 1
+          if (state.winner === resultType.lose) state.localResult.lose += 1
 
-          //@todo update transaction
-
+          break
+        }
+        case 'RECORD_MY_SCORE': {
+          // console.log(action.payload)
+          if (!wallet) {
+            alert('Please connect to your wallet.')
+          }
           const updateUser = async () => {
             await useUpdateResult({
               sender: sender,
               wallet: wallet!, //
               client: client!,
-              user: { address: Address.parse(wallet!), ...state.localResult },
+              user: { ...state.localResult, address: Address.parse(wallet!) },
               configValue: state.contractResult!,
             })
           }
@@ -161,9 +170,10 @@ const useTicTacToe = () => {
         }
         case 'SET_CONFIG_RESULT': {
           state.contractResult = action.payload.configValue
-
-          const result = action.payload.configValue && action.payload.configValue.results.filter((val, _) => val.address.toRawString() === action.payload.wallet)
-          state.localResult = { address: result![0].address, win: result![0].win, lose: result![0].lose, tie: result![0].tie }
+          if (action.payload.configValue.results.length) {
+            const result = action.payload.configValue && action.payload.configValue.results.filter((val, _) => val.address.toRawString() === action.payload.wallet)
+            state.localResult = { address: result[0].address, win: result[0].win, lose: result[0].lose, tie: result![0].tie }
+          }
           break
         }
         default:
@@ -175,7 +185,7 @@ const useTicTacToe = () => {
       board: Array.from({ length: 9 }, () => ''),
       winner: '',
       isModalShow: false,
-      localResult: { win: 0, lose: 0, tie: 0 },
+      localResult: { address: '', win: 0, lose: 0, tie: 0 },
       contractResult: undefined,
     }
   )
@@ -193,8 +203,6 @@ const useTicTacToe = () => {
       gameDispatcher({ type: 'CHECK_RESULT', payload: resultType[gameState.winner] })
     }
   }, [gameState.winner])
-
-  useEffect(() => {}, [])
 
   return [gameState, gameDispatcher] as const
 }
