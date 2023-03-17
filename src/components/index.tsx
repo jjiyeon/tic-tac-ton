@@ -42,6 +42,11 @@ const TicTacToe = () => {
     console.log('click')
     setIsRankingShow(true)
   }
+
+  const onRecordClick = () => {
+    // 기록하기를 누르면 트랜잭션이 발생한다. 다만 그전에 이겼는지 졌는지 결과가 필요하다.
+    gameDispatcher({ type: 'RECORD_MY_SCORE' })
+  }
   useEffect(() => {
     if (connected && wallet && client) {
       getConfigResult()
@@ -55,9 +60,9 @@ const TicTacToe = () => {
         </button>
       </UI.Header>
       <UI.ScoreTextList>
-        <UI.Text>Win : {gameState.localResult.win || 0}</UI.Text>
-        <UI.Text>Lose :{gameState.localResult.lose || 0}</UI.Text>
-        <UI.Text>Tie :{gameState.localResult.tie || 0}</UI.Text>
+        <UI.Text>Win: {gameState.localResult.win || 0}</UI.Text>
+        <UI.Text>Lose: {gameState.localResult.lose || 0}</UI.Text>
+        <UI.Text>Tie: {gameState.localResult.tie || 0}</UI.Text>
       </UI.ScoreTextList>
 
       <div>
@@ -66,14 +71,14 @@ const TicTacToe = () => {
             {gameState.winner}
           </Modal>
         )}
-        {isRankingShow && <Ranking />}
+        {isRankingShow && <Ranking config={gameState.contractResult?.results || []} onCloseClick={() => setIsRankingShow((state) => !state)} />}
 
         <Game squareCurrentValue={gameState} onSquareClick={(id) => handleSquareClick(id)} />
       </div>
 
-      <UI.ConnectWallet>
-        <TonConnectButton />
-      </UI.ConnectWallet>
+      <UI.RecordButtonWrapper>
+        <UI.RecordButton onClick={onRecordClick}>Record My Score</UI.RecordButton>
+      </UI.RecordButtonWrapper>
     </UI.Container>
   )
 }

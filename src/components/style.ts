@@ -8,11 +8,16 @@ const Container = styled.div`
 `
 
 const ConnectWallet = styled.div`
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
+
+  position: absolute;
+  top: 20px;
+  right: 20px;
 
   button {
     background-color: tomato;
+    font-family: sans-serif;
   }
 `
 const Header = styled.h1`
@@ -57,7 +62,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
 `
 const ResetButton = styled.button`
   width: 200px;
@@ -79,10 +86,40 @@ const ScoreTextList = styled.ul`
   justify-content: space-between;
   padding: 10px 0;
 `
-const Text = styled.li``
+const Text = styled.li`
+  font-size: 16px;
+`
 
 const ScoreWrapper = styled.div`
   margin: 0 45px;
+`
+const RecordButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+`
+const RecordButton = styled.button`
+  width: 200px;
+  height: 42px;
+  border-radius: 16px;
+  border: 0;
+  background-color: #52abfc;
+  color: #fff;
+`
+const RankingButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  background: tomato;
+  border-radius: 4px;
+`
+const RankingUsers = styled.ul`
+  li {
+    color: #000;
+  }
 `
 export {
   Container,
@@ -97,4 +134,8 @@ export {
   ModalContainer,
   Wrapper,
   ResetButton,
+  RecordButtonWrapper,
+  RecordButton,
+  RankingButton,
+  RankingUsers,
 }
