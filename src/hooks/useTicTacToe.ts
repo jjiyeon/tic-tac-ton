@@ -180,6 +180,8 @@ const useTicTacToe = () => {
           break
         }
         default:
+          console.log('error!!!!!')
+          alert('error!')
           throw new Error()
       }
     }),
