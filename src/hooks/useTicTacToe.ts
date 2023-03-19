@@ -128,18 +128,20 @@ const useTicTacToe = () => {
           break
         }
         case 'RECORD_MY_SCORE': {
-          // console.log(action.payload)
+          console.log('RECORD_MY_SCORE')
           if (!wallet) {
             alert('Please connect to your wallet.')
           }
           const updateUser = async () => {
-            await useUpdateResult({
-              sender: sender,
-              wallet: wallet!, //
-              client: client!,
-              user: { ...state.localResult, address: Address.parse(wallet!) },
-              configValue: state.contractResult!,
-            })
+            if (wallet && client) {
+              await useUpdateResult({
+                sender: sender,
+                wallet: wallet, //
+                client: client,
+                user: { ...state.localResult, address: Address.parse(wallet) },
+                configValue: state.contractResult!,
+              })
+            }
           }
 
           updateUser()
@@ -169,6 +171,9 @@ const useTicTacToe = () => {
           break
         }
         case 'SET_CONFIG_RESULT': {
+          console.log(action.payload.configValue)
+          alert(action.payload.configValue)
+
           state.contractResult = action.payload.configValue
           if (action.payload.configValue.results.length) {
             const result = action.payload.configValue.results.filter((val, _) => {

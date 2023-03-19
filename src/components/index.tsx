@@ -36,9 +36,7 @@ const TicTacToe = () => {
   const getConfigResult = async () => {
     const configResult = await useGetResult({ sender: sender, wallet: wallet!, client: client! })
     if (!configResult.results.length) return alert('다시 접속해주세요')
-    alert(wallet)
-    alert(configResult.results)
-    // gameDispatcher({ type: 'SET_CONFIG_RESULT', payload: { configValue: configResult!, wallet: wallet! } })
+    gameDispatcher({ type: 'SET_CONFIG_RESULT', payload: { configValue: configResult!, wallet: wallet! } })
   }
 
   const onRankingClick = () => {
