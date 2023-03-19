@@ -171,16 +171,13 @@ const useTicTacToe = () => {
           break
         }
         case 'SET_CONFIG_RESULT': {
-          console.log(action.payload.configValue)
-
           state.contractResult = action.payload.configValue
-          if (action.payload.configValue.results.length) {
-            console.log(11, action.payload.configValue)
-            const result = action.payload.configValue.results.filter((val, _) => {
-              if (!val.address) return alert('undefined!')
-              return val.address.toString() === Address.parse(action.payload.wallet).toString()
-            })
-            console.log(1111111, result)
+
+          const result = action.payload.configValue.results.filter((val, _) => {
+            if (!val.address) return alert('undefined!')
+            return val.address.toString() === Address.parse(action.payload.wallet).toString()
+          })
+          if (result.length > 0) {
             state.localResult = { address: result[0].address, win: result[0].win, lose: result[0].lose, tie: result![0].tie }
           }
           break
