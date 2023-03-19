@@ -177,11 +177,11 @@ const useTicTacToe = () => {
           if (action.payload.configValue.results.length) {
             console.log(11, action.payload.configValue)
             const result = action.payload.configValue.results.filter((val, _) => {
-              console.log(1111111, val)
               if (!val.address) return alert('undefined!')
               return val.address.toString() === Address.parse(action.payload.wallet).toString()
             })
-            // state.localResult = { address: result[0].address, win: result[0].win, lose: result[0].lose, tie: result![0].tie }
+            console.log(1111111, result)
+            state.localResult = { address: result[0].address, win: result[0].win, lose: result[0].lose, tie: result![0].tie }
           }
           break
         }
