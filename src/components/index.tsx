@@ -30,7 +30,6 @@ const TicTacToe = () => {
   const [isRankingShow, setIsRankingShow] = useState(false)
 
   const handleSquareClick = (id: number) => {
-    // if (!connected) return gameDispatcher({ type: 'WALLET_NOT_FOUND' }) // 알림창 컴포넌트 필요
     gameDispatcher({ type: 'SET_BOARD', payload: { idx: id } })
   }
   const getConfigResult = async () => {
@@ -40,12 +39,10 @@ const TicTacToe = () => {
   }
 
   const onRankingClick = () => {
-    console.log('click')
     setIsRankingShow(true)
   }
 
   const onRecordClick = () => {
-    // 기록하기를 누르면 트랜잭션이 발생한다. 다만 그전에 이겼는지 졌는지 결과가 필요하다.
     gameDispatcher({ type: 'RECORD_MY_SCORE' })
   }
   useEffect(() => {
