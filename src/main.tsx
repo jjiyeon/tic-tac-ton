@@ -3,7 +3,7 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 // this manifest is used temporarily for development purposes
-const manifestUrl = '../tictacton-manifest.json'
+const manifestUrl = './tictacton-manifest.json'
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
