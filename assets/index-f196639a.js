@@ -727,4 +727,4 @@ Values:
   flex-direction: column;
   justify-content: center;
   gap: 20px;
-`;function App(){return jsx$1(StyledApp,{children:jsxs(AppContainer,{children:[jsx$1(ConnectWallet,{children:jsx$1(TonConnectButton$1,{})}),jsx$1(TicTacToe,{})]})})}const manifestUrl="./tictacton-manifest.json",queryClient=new QueryClient({defaultOptions:{queries:{refetchOnWindowFocus:!1}}});client.createRoot(document.getElementById("root")).render(jsx$1(TonConnectUIProvider$1,{manifestUrl,children:jsx$1(QueryClientProvider,{client:queryClient,children:jsx$1(App,{})})}));
+`;function App(){return jsx$1(StyledApp,{children:jsxs(AppContainer,{children:[jsx$1(ConnectWallet,{children:jsx$1(TonConnectButton$1,{})}),jsx$1(TicTacToe,{})]})})}const manifestUrl="/tictacton-manifest.json",queryClient=new QueryClient({defaultOptions:{queries:{refetchOnWindowFocus:!1}}});client.createRoot(document.getElementById("root")).render(jsx$1(TonConnectUIProvider$1,{manifestUrl,children:jsx$1(QueryClientProvider,{client:queryClient,children:jsx$1(App,{})})}));
