@@ -71,7 +71,9 @@ export type GameAction =
     }
   | {
       type: 'RECORD_MY_SCORE'
-      // payload: Omit<ResultCount, 'address'>
+    }
+  | {
+      type: 'LOCAL_RESULT_INIT'
     }
 
 type GameReducer = (state: GameState, action: GameAction) => GameState
@@ -182,6 +184,10 @@ const useTicTacToe = () => {
           }
           break
         }
+        case 'LOCAL_RESULT_INIT': {
+          state.localResult = { address: '', win: 0, lose: 0, tie: 0 }
+          break
+        }
         default:
           console.log('error!!!!!')
           alert('error!')
@@ -211,6 +217,12 @@ const useTicTacToe = () => {
       gameDispatcher({ type: 'CHECK_RESULT', payload: resultType[gameState.winner] })
     }
   }, [gameState.winner])
+
+  useEffect(() => {
+    if (!connected) {
+      gameDispatcher({ type: 'LOCAL_RESULT_INIT' })
+    }
+  }, [connected])
 
   return [gameState, gameDispatcher] as const
 }
